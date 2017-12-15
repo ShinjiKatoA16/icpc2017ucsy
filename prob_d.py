@@ -39,9 +39,8 @@ def solve(tc, prime_list, non_prime_list):
     outlist = list()
 
     for c in str_in:
-        c2 = '00000000' + bin(ord(c))[2:]
-        c2 = c2[len(c2)-8:]
-        # print(c2)
+        c2 = bin(ord(c))[2:].zfill(8)
+        print(c2)
         for bit in c2:
             if bit == '1':
                 outlist.append(prime_list[index_p])
