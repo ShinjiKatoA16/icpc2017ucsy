@@ -40,7 +40,7 @@ def solve(tc, prime_list, non_prime_list):
 
     for c in str_in:
         c2 = bin(ord(c))[2:].zfill(8)
-        print(c2)
+        #print(c2)
         for bit in c2:
             if bit == '1':
                 outlist.append(prime_list[index_p])
