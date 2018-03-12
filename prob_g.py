@@ -31,6 +31,9 @@ class Node():
         new_nd = Node(self.stones, self.cost)
         return new_nd
 
+    def print_node(self):
+        print(self.cost, self.stones)
+
 def parse_tc(tc):
     '''
         Input: Test Case
@@ -76,18 +79,26 @@ def update_nodes(nodes, st):
     '''
     new_list = list()
     for nd in nodes:
-        if st >= nd.stones[-1]:
+        if st == nd.stones[-1]:
             nd.append_stone(st)
             new_list.append(nd)
-        else:
+        elif st < nd.stones[-1]:
+            nd.cost += st
+            new_list.append(nd)
+        else:  # st > nd.stone[-1]
             new_nd = nd.dup_node()
-            new_nd.insert_stone(st)
+            new_nd.append_stone(st)
             new_list.append(new_nd)
 
             nd.cost += st
             new_list.append(nd)
 
+
+    #print('Node is updated')
+    #for nd in new_list:
+    #    nd.print_node()
     return clean_up(new_list)
+    #return new_list
 
 
 def lowest_cost(nodes):
