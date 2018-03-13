@@ -6,6 +6,7 @@
     Problem-G: Stone
 '''
 import sys
+#from heapq import heappush, heapify
 
 
 class TestCase():
@@ -20,19 +21,18 @@ class Node():
     def append_stone(self, stone):
         self.stones.append(stone)
 
-    def insert_stone(self, stone):
-        #print('Insert', stone, 'To', self.stones, self.cost, end='\t')
-        while stone < self.stones[-1]:
-            self.cost += self.stones.pop()
-        self.stones.append(stone)
-        #print(self.stones, self.cost)
-
     def dup_node(self):
         new_nd = Node(self.stones, self.cost)
         return new_nd
 
-    def print_node(self):
-        print(self.cost, self.stones)
+    def __str__(self):
+        return '<cost:{} stones:{}'.format(self.cost, self.stones)
+
+    def __lt__(self, other):
+        if self.cost == other.cost:
+            return self.stones[-1] < other.stones[-1]
+        else:
+            return self.cost < other.cost
 
 def parse_tc(tc):
     '''
@@ -77,27 +77,36 @@ def update_nodes(nodes, st):
                Integer
         Return: Node class object
     '''
-    new_list = list()
+    new_list = []
+    stone_added = list()
+
     for nd in nodes:
         if st == nd.stones[-1]:
             nd.append_stone(st)
+            #heappush(new_list, nd)
             new_list.append(nd)
+            if st not in stone_added:
+                stone_added.append(st)
         elif st < nd.stones[-1]:
             nd.cost += st
             new_list.append(nd)
         else:  # st > nd.stone[-1]
-            new_nd = nd.dup_node()
-            new_nd.append_stone(st)
-            new_list.append(new_nd)
+            if st not in stone_added:
+                #print('New node created', st, nd.stones[-1])
+                new_nd = nd.dup_node()
+                new_nd.append_stone(st)
+                stone_added.append(st)
+                new_list.append(new_nd)
 
             nd.cost += st
             new_list.append(nd)
 
 
-    #print('Node is updated')
+    new_list.sort()
+    #print('Node is updated with', st)
     #for nd in new_list:
-    #    nd.print_node()
-    return clean_up(new_list)
+    #    print(nd)
+    return new_list
     #return new_list
 
 
